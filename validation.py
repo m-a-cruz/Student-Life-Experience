@@ -20,11 +20,13 @@ users = [
     {
         "email": "anna.romulo@chmsc.edu.ph",
         "password": bcrypt.hashpw("!Juan23456Seven".encode('utf-8'), bcrypt.gensalt()).decode('utf-8')  # Hashed password
+        # "password": "!Juan23456Seven",
     }
 ]
 
 def login(email, password):
     for user in users:
         if user["email"] == email and bcrypt.checkpw(password.encode('utf-8'), user["password"].encode('utf-8')):
+        # if user["email"] == email and user["password"] == password:    
             return True
     return False

@@ -103,21 +103,18 @@ def analyze():
         if text_column not in data.columns:
             return jsonify({'error': f"Column '{text_column}' not found in the CSV file."}), 400
 
-        # Initialize an empty list to store all tokens
+       
         all_tokens = []
 
-        # Loop through each text in the specified column
+        
         for text in data[text_column]:
-            tokens = process_text(str(text))  # Ensure text is a string
-            all_tokens.extend(tokens)  # Add tokens to the overall list
+            tokens = process_text(str(text)) 
+            all_tokens.extend(tokens)  
 
-        # Perform overall sentiment analysis on the accumulated tokens
         overall_score, overall_stats = analyze_sentiment(all_tokens)
 
-        # Determine the overall sentiment label
         overall_label = 'positive' if overall_score > 0 else 'negative' if overall_score < 0 else 'neutral'
 
-        # Return the overall analysis result
         return jsonify({
             'overall_score': overall_score,
             'overall_label': overall_label,
