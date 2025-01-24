@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import csv
 from flask_cors import CORS
 import files
+import bcrypt
 
 def fetch_data():
     try:
@@ -15,3 +16,15 @@ def fetch_data():
         print(f"Error fetching data: {e}")
         return jsonify({"error": "Internal Server Error"}), 500
     
+users = [
+    {
+        "email": "anna.romulo@chmsc.edu.ph",
+        "password": bcrypt.hashpw("!Juan23456Seven".encode('utf-8'), bcrypt.gensalt()).decode('utf-8')  # Hashed password
+    }
+]
+
+def login(email, password):
+    for user in users:
+        if user["email"] == email and bcrypt.checkpw(password.encode('utf-8'), user["password"].encode('utf-8')):
+            return True
+    return False

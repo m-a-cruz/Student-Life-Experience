@@ -1,6 +1,5 @@
 import matplotlib
-matplotlib.use('Agg')  # Use the Agg backend to avoid Tkinter issues
-
+matplotlib.use('Agg')
 import initialization
 import validation
 import data_gathering
@@ -9,6 +8,9 @@ from flask_cors import CORS
 import charts
 import threading
 import logging
+import app as sentiment 
+
+
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -28,6 +30,22 @@ def fetch_data():
     except Exception as e:
         logging.error(f"Error fetching data: {e}")
         return jsonify({"status": "error", "message": "Failed to fetch data."}), 500
+
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    email = data.get('email')
+    password = data.get('password')
+
+    try:
+        confimed = validation.login(email, password)
+        if confimed:
+            return jsonify({"status": "success", "message": "Login successful."}), 200
+        else:
+            return jsonify({"status": "error", "message": "Invalid credentials."}), 401
+    except Exception as e:
+        logging.error(f"Error logging in: {e}")
+        return jsonify({"status": "error", "message": "Failed to log in."}), 500
 
 @app.route('/save-data', methods=['POST'])
 def save_data():
@@ -60,6 +78,16 @@ def get_charts():
         logging.error(f"Error fetching charts: {e}")
         return jsonify({"status": "error", "message": "Failed to fetch charts."}), 500
 
+# @app.route('/analyze', methods=['GET'])
+# def analyze():
+#     # if not text:
+#     #     return jsonify({'error': 'No text provided'}), 400
+#     try:
+#         result = sentiment.get_data()
+#         return jsonify(result)
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
+
 # Starting point for the app
 def start_app():
     try:
@@ -72,7 +100,8 @@ def start_app():
         charts.plot_pie_charts()
 
         # Run the Flask app (this will run the app in the main thread)
-        app.run(debug=True, threaded=True)
+        # app.run(debug=True, threaded=True)
+        app.run(host='0.0.0.0', port=5000, debug=True, threaded=True)
 
     except Exception as e:
         logging.critical(f"Critical error starting the app: {e}")

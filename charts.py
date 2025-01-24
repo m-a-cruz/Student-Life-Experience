@@ -22,7 +22,23 @@ questions = {
     "Q10": "Teaching and Learning Satisfaction",
     "Q11": "Other Facilities Satisfaction",
 }
+choices = {
+    "Q1": ["BS Computer Science", "BS Information Systems"],
+    "Q2": ["1st year", "2nd year", "3rd year", "4th year"],
+    "Q3": ["Regular student", "Irregular student", "Shiftee", "Transferee", "Returnee", "Working student", "Scholar", "Student assistant"] ,
+    "Q4": ["Very satisfied", "Satisfied", "Dissatisfied", "Very dissatisfied"],
+    "Q5": ["Academic courses", "Extracurricular activities", "Faculty interaction", "Peer interaction", "Campus facilities", "Support services"] ,
+    "Q6": ["Academic workload", "Time management", "Financial issues", "Personal issues", "Lack of support services", "Health-related issues"],
+    "Q7": ["Significantly improved", "Somewhat improved", "Remained the same", "Somewhat worsened", "Significantly worsened"],
+    "Q8": ["Very supported", "Somewhat supported", "Supported", "Not supported"],
+    "Q10": ['1','2','3','4','5'],
+    "Q11": ['1','2','3','4','5'],
+}
 
+# print(*[item for values_list in choices.values() for item in values_list], sep='\n')
+# for key, values_list in choices.items():
+#     for item in values_list:
+#         print(item)
 # Cached charts and lock for thread-safety
 cached_charts = []
 chart_lock = threading.Lock()
@@ -58,20 +74,29 @@ def plot_pie_charts():
                 sorted_responses.plot.pie(
                     autopct='%1.1f%%',
                     startangle=90,
-                    textprops={'fontsize': 10},
+                    textprops={'fontsize': 12},
                     colors=plt.cm.Paired.colors,
                     ax=ax,
                     labels=None,
                 )
-
+                # legend_items = [item for key, values_list in choices.items() if key == column for item in values_list]
+                # # legend = pd.DataFrame(legend_items)
+                # # legend = [item for legend_items.keys() in legend_items for legend_items.keys() in legend_items]
+                
+                # legend = [value for sublist in [value for key, value in choices.items() if key == column] for value in sublist]
+                # print(legend)
                 ax.legend(
                     sorted_responses.index,
-                    loc="upper left",
-                    bbox_to_anchor=(0.85, 1),
+                    # sorted_responses.index,
+                    loc="upper right",
+                    bbox_to_anchor=(1.25, 1),
                     fontsize=10,
                 )
-
-                plt.title(f"{questions.get(column, column)}", loc="left", fontsize=12, fontweight="bold")
+                plt.title(f"{questions.get(column, column)}", loc="left", fontsize=16, fontweight="bold")
+                plt.ylabel("")
+                plt.xlabel("")
+            
+                plt.title(f"{questions.get(column, column)}", loc="left", fontsize=16, fontweight="bold")
                 plt.ylabel("")
                 plt.xlabel("")
 
